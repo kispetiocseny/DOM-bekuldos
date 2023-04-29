@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM gyakorló feladatsor</title>
+    <style>
+        .square {
+            position: absolute;
+            border: 2px solid black;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+
+        .visible {
+            opacity: 1;
+        }
+
+        img {
+            height: 200px;
+            width: 200px;
+            transition: opacity 5s ease-in-out;
+        }
+
+        #hibaUzenet {
+            position: absolute;
+            width: 250px;
+            height: 100px;
+            top: 0px;
+            left: 50%;
+            background-color: black;
+            color: white;
+            font-weight: 10px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        Első feladat
+    </h1>
+
+    <label for="textInput">Szöveg:</label>
+    <input type="text" id="textInput" oninput="KarakterSzamlalo()">
+    <p id="Szamlalo">Karakterszám: 0</p>
+
+    <h1>Második feladat</h1>
+    <label for="xInput">X koordináta:</label>
+    <input type="number" id="xInput" value="100">
+    <label for="yInput">Y koordináta:</label>
+    <input type="number" id="yInput" value="100">
+    <button id="gomb">Kirajzol</button>
+    <div id="kirajzol"></div>
+    <h1>Harmadik feladat</h1>
+    <button id="CatButton">Kattints rám!</button>
+    <img src="hidingCat.jpg" alt="Hiding cat" class="visible" id="Cat" />
+    <h1>Negyedik feladat</h1>
+    <label for="email">Email cím</label>
+    <input type="email" id="email" required></input>
+    <label for="emailmegerosit">Email cím megerősítése</label>
+    <input type="email" id="emailMegerosit" required></input>
+    <button type="button" id="ellenorzes">Ellenőrzés</button>
+    <div id="hibaUzenet"></div>
+    <script>
+        // 1. feladat
+        function KarakterSzamlalo() {
+            const szoveg = document.getElementById("textInput");
+            const szamlalo = document.getElementById("Szamlalo");
+            szamlalo.innerHTML = "Karakterszám: " + szoveg.value.length;
+        }
+        // 2. feladat
+        const gomb = document.getElementById("gomb");
+        gomb.addEventListener("click", kirajzolo)
+        function kirajzolo() {
+            const xInput = document.getElementById("xInput").value;
+            const yInput = document.getElementById("yInput").value;
+            const kirajzol = document.getElementById("kirajzol");
+            const squareHTML = `<div class="square" style="left:${xInput}px;top:${yInput}px;width:50px;height:50px;"></div>`;
+            kirajzol.innerHTML = squareHTML;
+        }
+        // 3. feladat
+        const CatButton = document.getElementById("CatButton");
+        CatButton.addEventListener("click", MacskaEltunes)
+        function MacskaEltunes() {
+            const cat = document.querySelector("#Cat");
+            if (cat.classList.contains("visible")) {
+                cat.classList.remove("visible");
+                cat.classList.add("hidden");
+                cat.style.transitionDuration = "5s";
+            } else {
+                cat.classList.remove("hidden");
+                cat.classList.add("visible");
+                cat.style.transitionDuration = "5s";
+            }
+        }
+        //4. feladat
+        const ellenorzes = document.querySelector("#ellenorzes");
+        ellenorzes.addEventListener("click", EmailEllenorzes);
+
+        function EmailEllenorzes() {
+            let email = document.querySelector("#email").value;
+            let emailMegerosit = document.querySelector("#emailMegerosit").value;
+            let emailMinta = /^[0-9a-z\.-]+@([0-9a-z-]+\.)+[a-z]{2,4}$/i;
+            let hibaDiv = document.querySelector("#hibaUzenet");
+            if (email == "" && emailMegerosit == "") {
+                hibaDiv.style.visibility = "visible";
+                hibaDiv.style.backgroundColor = "red";
+                hibaDiv.innerHTML = "Nincs kitöltve egyik mező sem!";
+            } else if (email == "") {
+                hibaDiv.style.visibility = "visible";
+                hibaDiv.style.backgroundColor = "red";
+                hibaDiv.innerHTML = "Nincs kitöltve az e-mail mező."
+            }
+            else if (emailMegerosit == "") {
+                hibaDiv.style.visibility = "visible";
+                hibaDiv.style.backgroundColor = "red";
+                hibaDiv.innerHTML = "Nincs kitöltve az e-mail megerősítése mező."
+            }
+            else if (email != emailMegerosit) {
+                hibaDiv.style.visibility = "visible";
+                hibaDiv.style.backgroundColor = "red";
+                hibaDiv.innerHTML = "A két mező tartalma nem egyezik"
+            }
+            else if (emailMinta.test(email) == false || emailMinta.test(emailMegerosit == false)) {
+                hibaDiv.style.visibility = "visible"
+                hibaDiv.style.backgroundColor = "red";
+                hibaDiv.innerHTML = "Nem megfelelő az email cím formátuma."
+            }
+            else {
+                hibaDiv.style.visibility = "visible";
+                hibaDiv.style.backgroundColor = "green";
+                hibaDiv.innerHTML = "Adatok rögzítése sikeres."
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
